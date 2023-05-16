@@ -264,6 +264,19 @@ class StackField:
 		else:
 			StackField.registers["v"] = 0
 	
+	def clrscr():
+		os.system("clear")
+	
+	def input(stack):
+		val = input()
+		if val.isnumeric():
+			StackField.push(stack,int(val))
+		else:
+			vals = []
+			for i in range(len(val)):
+				vals.append(ord(val[i]))
+			StackField.push(stack,*vals)
+	
 	def cmp(val):
 		StackField.registers["c"] = (StackField.registers["v"] > val)*1 - (StackField.registers["v"] < val)*1 + 0
 	
@@ -320,7 +333,21 @@ class StackField:
 			State.line = args[0]-2
 	
 	def ret(*args):
-		State.line = StackField.callstack.pop()
+		if len(args) > 1: # Conditional
+			if args[0] == "eq" and StackField.registers["c"] == 0:
+				State.line = StackField.callstack.pop()
+			if args[0] == "ne" and StackField.registers["c"] != 0:
+				State.line = StackField.callstack.pop()
+			if args[0] == "gr" and StackField.registers["c"] > 0:
+				State.line = StackField.callstack.pop()
+			if args[0] == "ge" and StackField.registers["c"] >= 0:
+				State.line = StackField.callstack.pop()
+			if args[0] == "ls" and StackField.registers["c"] < 0:
+				State.line = StackField.callstack.pop()
+			if args[0] == "le" and StackField.registers["c"] <= 0:
+				State.line = StackField.callstack.pop()
+		else:
+			State.line = StackField.callstack.pop()
 	
 	def inc(stack):
 		stack -= 1
@@ -359,19 +386,6 @@ class StackField:
 			v = StackField.stacks[stack].pop()
 			acc += v
 		StackField.stacks[stack].append(acc)
-		StackField.registers["s"] = len(StackField.stacks[stack])
-		if StackField.registers["s"] > 0:
-			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
-		else:
-			StackField.registers["v"] = 0
-	
-	def inv(stack):
-		stack -= 1
-		if stack < 0 or stack >= len(StackField.stacks):
-			StackField.registers["v"] = 0
-			StackField.registers["s"] = 0
-			return
-		StackField.stacks[stack].append(-StackField.stacks[stack].pop())
 		StackField.registers["s"] = len(StackField.stacks[stack])
 		if StackField.registers["s"] > 0:
 			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
@@ -426,6 +440,45 @@ class StackField:
 		else:
 			StackField.registers["v"] = 0
 	
+	def floor(stack):
+		stack -= 1
+		if stack < 0 or stack >= len(StackField.stacks):
+			StackField.registers["v"] = 0
+			StackField.registers["s"] = 0
+			return
+		StackField.registers["s"] = len(StackField.stacks[stack])
+		StackField.stacks[stack][StackField.registers["s"]-1] = int(StackField.stacks[stack][StackField.registers["s"]-1])
+		if StackField.registers["s"] > 0:
+			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
+		else:
+			StackField.registers["v"] = 0
+	
+	def ceil(stack):
+		stack -= 1
+		if stack < 0 or stack >= len(StackField.stacks):
+			StackField.registers["v"] = 0
+			StackField.registers["s"] = 0
+			return
+		StackField.registers["s"] = len(StackField.stacks[stack])
+		StackField.stacks[stack][StackField.registers["s"]-1] = math.ceil(StackField.stacks[stack][StackField.registers["s"]-1])
+		if StackField.registers["s"] > 0:
+			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
+		else:
+			StackField.registers["v"] = 0
+	
+	def inv(stack):
+		stack -= 1
+		if stack < 0 or stack >= len(StackField.stacks):
+			StackField.registers["v"] = 0
+			StackField.registers["s"] = 0
+			return
+		StackField.stacks[stack].append(-StackField.stacks[stack].pop())
+		StackField.registers["s"] = len(StackField.stacks[stack])
+		if StackField.registers["s"] > 0:
+			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
+		else:
+			StackField.registers["v"] = 0
+	
 	def pull(stack,n):
 		stack -= 1
 		if stack < 0 or stack >= len(StackField.stacks):
@@ -453,45 +506,6 @@ class StackField:
 			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
 		else:
 			StackField.registers["v"] = 0
-	
-	def floor(stack):
-		stack -= 1
-		if stack < 0 or stack >= len(StackField.stacks):
-			StackField.registers["v"] = 0
-			StackField.registers["s"] = 0
-			return
-		StackField.registers["s"] = len(StackField.stacks[stack])
-		StackField.stacks[stack][StackField.registers["s"]-1] = int(StackField.stacks[stack][StackField.registers["s"]-1])
-		if StackField.registers["s"] > 0:
-			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
-		else:
-			StackField.registers["v"] = 0
-	
-	def ceil(stack):
-		stack -= 1
-		if stack < 0 or stack >= len(StackField.stacks):
-			StackField.registers["v"] = 0
-			StackField.registers["s"] = 0
-			return
-		StackField.registers["s"] = len(StackField.stacks[stack])
-		StackField.stacks[stack][StackField.registers["s"]-1] = math.ceil(StackField.stacks[stack][StackField.registers["s"]-1])
-		if StackField.registers["s"] > 0:
-			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
-		else:
-			StackField.registers["v"] = 0
-	
-	def input(stack):
-		val = input()
-		if val.isnumeric():
-			StackField.push(stack,int(val))
-		else:
-			vals = []
-			for i in range(len(val)):
-				vals.append(ord(val[i]))
-			StackField.push(stack,*vals)
-	
-	def clrscr():
-		os.system("clear")
 	
 	def save(stack,name):
 		stack -= 1
