@@ -1,0 +1,27 @@
+; Labels for stacks
+label Prev 1
+label Cur 2
+label NumOutputs 3
+label Seq 4
+
+push Prev 0
+push Cur 1
+push Seq 1
+push NumOutputs 50
+
+label loop
+read Prev
+push Seq v
+read Cur
+push Seq v
+add Seq 2
+pop Prev 1
+read Cur
+push Prev v
+pop Cur 1
+read Seq
+push Cur v
+dec NumOutputs
+cmp 0
+jump ne loop
+prntraw Seq

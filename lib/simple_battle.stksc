@@ -1,0 +1,180 @@
+; Simple Battle Handler
+; by RGB Productions
+;
+; To start a battle:
+; 1. Push to EnemyName and EnemyStats
+; 2. Call SBH_Start (DO NOT JUMP)
+
+label UserStats 17
+label UserItems 18
+label EnemyName 19
+label EnemyStats 20
+label BattleState 21
+label BattleVars 22
+
+label STAT_ATK 1
+label STAT_DEF 2
+label STAT_ACC 3
+label STAT_HP 4
+label DROP_ATK 3
+label DROP_DEF 2
+label DROP_ACC 1
+label DROP_HP 0
+
+label S_LF 101
+label S_HP 102
+label S_COL 103
+label S_Enemys 104
+label S_Your 105
+label S_EnemLostHP 106
+label S_UserLostHP 107
+label S_EnemMissed 108
+label S_UserMissed 109
+label S_Defeat 110
+label S_Victory 111
+label S_Options 112
+label S_YourTurn 113
+
+	jump Example
+
+label SBH_InitStrings
+	push S_LF 10
+	push S_HP "HP"
+	push S_COL ": "
+	push S_Enemys "Enemy's "
+	push S_Your "Your "
+	push S_EnemLostHP "Enemy lost "
+	push S_UserLostHP "You lost "
+	push S_EnemMissed "Enemy missed!"
+	push S_UserMissed "You missed!"
+	push S_Defeat "You lost the battle!"
+	push S_Victory "You won the battle!"
+	push S_Options "1. Attack" 10 "2. Item" 10 "3. Flee"
+	push S_YourTurn "Pick an option: "
+	ret
+
+label SBH_Start
+	clear BattleState
+	push BattleState 0
+	clrscr
+label SBH_NextTurn
+	pull UserStats STAT_HP
+	pull EnemyStats STAT_HP
+	print S_Enemys
+	print S_HP
+	print S_COL
+	prntnum EnemyStats
+	print S_LF
+	print S_Your
+	print S_HP
+	print S_COL
+	prntnum UserStats
+	print S_LF
+	drop UserStats DROP_HP
+	drop EnemyStats DROP_HP
+	println S_Options
+	print S_YourTurn
+	input BattleVars
+	clrscr
+	cmp 1
+	jump eq SBH_UserAtk
+	cmp 2
+	jump eq SBH_ItemMenu
+	cmp 3
+	jump eq SBH_End
+label SBH_Victory
+	println S_Victory
+	jump SBH_End
+label SBH_Defeat
+	println S_Defeat
+label SBH_End
+	ret
+label SBH_UserAtk
+	clear BattleVars
+	pull UserStats STAT_ACC
+	push BattleVars r
+	cmpstk UserStats
+	clear BattleVars
+	jump ls SBH_UserAttack_Hit
+label SBH_UserAttack_Miss
+	println S_UserMissed
+	drop UserStats DROP_ACC
+	jump SBH_EnemyAttack
+label SBH_UserAttack_Hit
+	drop UserStats DROP_ACC
+	pull UserStats STAT_ATK
+	pull EnemyStats STAT_DEF
+	push BattleVars v
+	read UserStats
+	push BattleVars v
+	div BattleVars 2
+	push BattleVars 5
+	mul BattleVars 2
+	ceil BattleVars
+	clone BattleVars 1
+	drop UserStats DROP_ATK
+	drop EnemyStats DROP_DEF
+	pull EnemyStats STAT_HP
+	push BattleVars v
+	sub BattleVars 2
+	pop EnemyStats 1
+	read BattleVars
+	push EnemyStats v
+	pop BattleVars 1
+	print S_EnemLostHP
+	prntnum BattleVars
+	println S_HP
+	clear BattleVars
+	read EnemyStats
+	cmp 0
+	jump le SBH_Victory
+	drop EnemyStats DROP_HP
+label SBH_EnemyAttack
+	clear BattleVars
+	pull EnemyStats STAT_ACC
+	push BattleVars r
+	cmpstk EnemyStats
+	clear BattleVars
+	jump ls SBH_EnemyAttack_Hit
+label SBH_EnemyAttack_Miss
+	println S_EnemMissed
+	drop EnemyStats DROP_ACC
+	jump SBH_NextTurn
+label SBH_EnemyAttack_Hit
+	drop EnemyStats DROP_ACC
+	pull EnemyStats STAT_ATK
+	pull UserStats STAT_DEF
+	push BattleVars v
+	read EnemyStats
+	push BattleVars v
+	div BattleVars 2
+	push BattleVars 5
+	mul BattleVars 2
+	ceil BattleVars
+	clone BattleVars 1
+	drop EnemyStats DROP_ATK
+	drop UserStats DROP_DEF
+	pull UserStats STAT_HP
+	push BattleVars v
+	sub BattleVars 2
+	pop UserStats 1
+	read BattleVars
+	push UserStats v
+	pop BattleVars 1
+	print S_UserLostHP
+	prntnum BattleVars
+	println S_HP
+	clear BattleVars
+	read UserStats
+	cmp 0
+	jump le SBH_Defeat
+	drop UserStats DROP_HP
+	jump SBH_NextTurn
+label SBH_ItemMenu
+	jump SBH_EnemyAttack
+
+label Example
+	call SBH_InitStrings
+	push UserStats 12 8 192 20
+	push EnemyStats 16 8 128 32
+	call SBH_Start

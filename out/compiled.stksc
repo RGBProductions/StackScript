@@ -1,0 +1,126 @@
+jump 123
+push 101 10
+push 102 72 80
+push 103 58 32
+push 104 69 110 101 109 121 39 115 32
+push 105 89 111 117 114 32
+push 106 69 110 101 109 121 32 108 111 115 116 32
+push 107 89 111 117 32 108 111 115 116 32
+push 108 69 110 101 109 121 32 109 105 115 115 101 100 33
+push 109 89 111 117 32 109 105 115 115 101 100 33
+push 110 89 111 117 32 108 111 115 116 32 116 104 101 32 98 97 116 116 108 101 33
+push 111 89 111 117 32 119 111 110 32 116 104 101 32 98 97 116 116 108 101 33
+push 112 49 46 32 65 116 116 97 99 107 10 50 46 32 73 116 101 109 10 51 46 32 70 108 101 101
+push 113 80 105 99 107 32 97 110 32 111 112 116 105 111 110 58 32
+ret
+clear 21
+push 21 0
+clrscr
+pull 17 4
+pull 20 4
+print 104
+print 102
+print 103
+prntnum 20
+print 101
+print 105
+print 102
+print 103
+prntnum 17
+print 101
+drop 17 0
+drop 20 0
+println 112
+print 113
+input 22
+clrscr
+cmp 1
+jump eq 47
+cmp 2
+jump eq 122
+cmp 3
+jump eq 46
+println 111
+jump 46
+println 110
+ret
+clear 22
+pull 17 3
+push 22 r
+cmpstk 17
+clear 22
+jump ls 56
+println 109
+drop 17 1
+jump 84
+drop 17 1
+pull 17 1
+pull 20 2
+push 22 v
+read 17
+push 22 v
+div 22 2
+push 22 5
+mul 22 2
+ceil 22
+clone 22 1
+drop 17 3
+drop 20 2
+pull 20 4
+push 22 v
+sub 22 2
+pop 20 1
+read 22
+push 20 v
+pop 22 1
+print 106
+prntnum 22
+println 102
+clear 22
+read 20
+cmp 0
+jump le 43
+drop 20 0
+clear 22
+pull 20 3
+push 22 r
+cmpstk 20
+clear 22
+jump ls 93
+println 108
+drop 20 1
+jump 19
+drop 20 1
+pull 20 1
+pull 17 2
+push 22 v
+read 20
+push 22 v
+div 22 2
+push 22 5
+mul 22 2
+ceil 22
+clone 22 1
+drop 20 3
+drop 17 2
+pull 17 4
+push 22 v
+sub 22 2
+pop 17 1
+read 22
+push 17 v
+pop 22 1
+print 107
+prntnum 22
+println 102
+clear 22
+read 17
+cmp 0
+jump le 45
+drop 17 0
+jump 19
+jump 84
+call 2
+push 17 12 8 192 20
+push 20 16 8 128 32
+call 16

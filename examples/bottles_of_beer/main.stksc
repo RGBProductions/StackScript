@@ -1,0 +1,22 @@
+label Bottles 1
+label S1 2
+label S2 3
+label S3 4
+push S1 " bottles of beer on the wall."
+push S2 " bottles of beer."
+push S3 "Take one down, pass it around."
+push Bottles 99
+label loop
+prntnum Bottles
+println S1
+prntnum Bottles
+println S2
+println S3
+dec Bottles
+prntnum Bottles
+println S1
+input 0
+clrscr
+read Bottles
+cmp 0
+jump ne loop
