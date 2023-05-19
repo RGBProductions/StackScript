@@ -1,4 +1,4 @@
-# StackScript
+<!-- # StackScript
 ## A pseudo-esoteric programming language with a unique memory management method.
 ---
 ## Quick Finder
@@ -63,4 +63,6 @@ Usage: `instruction <required> [optional]`
 | `ceil <stack>` | Rounds **up** the top item of `stack`. | `s` `v` |
 | `inv <stack>` | Inverts the top item of `stack`. | `s` `v` |
 | `pull <stack> <i>` | Pulls element `i` (bottom-up) to the top of `stack`. | `s` `v` |
-| `drop <stack> <n>` | Drops the top item of `stack` down `n` spaces. | `s` `v` |
+| `drop <stack> <n>` | Drops the top item of `stack` down `n` spaces. | `s` `v` | -->
+
+tag test
