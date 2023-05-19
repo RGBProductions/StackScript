@@ -506,52 +506,6 @@ class StackField:
 			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
 		else:
 			StackField.registers["v"] = 0
-	
-	def save(stack,name):
-		stack -= 1
-		spl = name.split("/")
-		filename = spl[len(spl)-1] + ".bin"
-		cur = "."
-		for itm in spl[:-1]:
-			cur = os.path.join(cur,itm)
-			if not os.path.exists(cur):
-				os.mkdir(cur)
-		if stack < 0 or stack >= len(StackField.stacks):
-			StackField.registers["v"] = 0
-			StackField.registers["s"] = 0
-			return
-		with open(filename,"wb") as f:
-			StackField.registers["v"] = 0
-			for val in StackField.stacks[stack]:
-				StackField.registers["v"] = val
-				f.write(int(val).to_bytes(4, "little"))
-			StackField.registers["s"] = len(StackField.stacks[stack])
-	
-	def load(stack,name):
-		stack -= 1
-		name += ".bin"
-		if stack < 0 or stack >= len(StackField.stacks):
-			StackField.registers["v"] = 0
-			StackField.registers["s"] = 0
-			return
-		if not os.path.exists(name):
-			StackField.registers["s"] = len(StackField.stacks[stack])
-			if StackField.registers["s"] > 0:
-				StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
-			else:
-				StackField.registers["v"] = 0
-			return
-		with open(name,"rb") as f:
-			b = f.read(4)
-			while b:
-				print(b)
-				StackField.push(stack, int.from_bytes(b, "little"))
-				b = f.read(4)
-		StackField.registers["s"] = len(StackField.stacks[stack])
-		if StackField.registers["s"] > 0:
-			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
-		else:
-			StackField.registers["v"] = 0
 
 class State:
 	line = 0
