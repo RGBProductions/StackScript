@@ -417,6 +417,38 @@ class StackField:
 		else:
 			StackField.registers["v"] = 0
 	
+	def lgand(stack,n):
+		stack -= 1
+		if stack < 0 or stack >= len(StackField.stacks):
+			StackField.registers["v"] = 0
+			StackField.registers["s"] = 0
+			return
+		acc = 1
+		for i in range(n):
+			acc = acc and StackField.stacks[stack].pop()
+		StackField.stacks[stack].append(acc)
+		StackField.registers["s"] = len(StackField.stacks[stack])
+		if StackField.registers["s"] > 0:
+			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
+		else:
+			StackField.registers["v"] = 0
+	
+	def lgor(stack,n):
+		stack -= 1
+		if stack < 0 or stack >= len(StackField.stacks):
+			StackField.registers["v"] = 0
+			StackField.registers["s"] = 0
+			return
+		acc = 0
+		for i in range(n):
+			acc = acc or StackField.stacks[stack].pop()
+		StackField.stacks[stack].append(acc)
+		StackField.registers["s"] = len(StackField.stacks[stack])
+		if StackField.registers["s"] > 0:
+			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
+		else:
+			StackField.registers["v"] = 0
+	
 	def pull(stack,n):
 		stack -= 1
 		if stack < 0 or stack >= len(StackField.stacks):
