@@ -1,3 +1,0 @@
-label Hello 1
-push Hello 1 2 3 4 5
-save Hello test.bin
