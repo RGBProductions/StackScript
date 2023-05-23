@@ -64,6 +64,6 @@ Usage: `instruction <required> [optional]`
 | `inv <stack>` | Inverts the top item of `stack`. | `s` `v` |
 | `pull <stack> <i>` | Pulls element `i` (bottom-up) to the top of `stack`. | `s` `v` |
 | `drop <stack> <n>` | Drops the top item of `stack` down `n` spaces. | `s` `v` |
-| `save <stack> <path>` | Saves `stack` to `path` (relative to the script's directory). | `s` `v` |
-| `load <stack> <path>` | Loads `path` to `stack` (relative to the script's directory). | `s` `v` |
+| `save <stack> <path>` | Saves `stack` to the file at `path` (relative to the script's directory). | `s` `v` |
+| `load <stack> <path>` | Loads the file at `path` to `stack` (relative to the script's directory). | `s` `v` |
 | `exit` | Immediately exits the program. | *None* |
