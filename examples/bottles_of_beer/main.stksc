@@ -1,22 +1,33 @@
+; Create labels
 label Bottles 1
 label S1 2
 label S2 3
 label S3 4
+; Write strings
 push S1 " bottles of beer on the wall."
 push S2 " bottles of beer."
 push S3 "Take one down, pass it around."
+; Initialize number of bottles
 push Bottles 99
 label loop
+; <n> bottles of beer on the wall.
 prntnum Bottles
 println S1
+; <n> bottles of beer.
 prntnum Bottles
 println S2
+; Take one down, pass it around.
 println S3
+; (decrement)
 dec Bottles
+; <n-1> bottles of beer on the wall.
 prntnum Bottles
 println S1
+; Wait for user input (write to null)
 input 0
+; Clear the screen
 clrscr
+; Loop if we have any bottles left
 read Bottles
 cmp 0
 jump ne loop

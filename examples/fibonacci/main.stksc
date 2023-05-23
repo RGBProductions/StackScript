@@ -1,27 +1,36 @@
+; Fibonacci sequence generator
+
 ; Labels for stacks
 label Prev 1
 label Cur 2
 label NumOutputs 3
 label Seq 4
 
+; Initialize data
 push Prev 0
 push Cur 1
 push Seq 1
 push NumOutputs 50
 
 label loop
+; Put previous and current onto Seq
 read Prev
 push Seq v
 read Cur
 push Seq v
+; Add them together to get the next number in the sequence
 add Seq 2
+; Replace Prev with Cur
 pop Prev 1
 read Cur
 push Prev v
 pop Cur 1
+; Replace Cur with the last value on Seq
 read Seq
 push Cur v
+; Decrement number of remaining outputs, continue if not zero
 dec NumOutputs
 cmp 0
 jump ne loop
+; Print the final sequence
 prntraw Seq
