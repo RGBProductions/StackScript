@@ -2,6 +2,9 @@ import os
 import requests
 import sys
 
+if not os.path.exists("out"):
+	os.mkdir("out")
+
 if len(sys.argv) < 2:
 	print("E: no script path provided")
 	exit()
@@ -119,11 +122,15 @@ class Precomp:
 					break
 				finalargs.append(str(args[i]))
 			lines[l] = " ".join(finalargs)
+		labelStr = ""
+		for label in labels:
+			labelStr += f"{label} {labels[label]}\n"
+		labelStr = labelStr[:-1]
+		with open("out/labels.txt", "w") as f:
+			f.write(labelStr)
 
 with open(script) as f:
 	lines = f.read().splitlines()
 Precomp.compile(lines)
-if not os.path.exists("out"):
-	os.mkdir("out")
 with open("out/compiled.stksc", "w") as f:
 	f.write("\n".join(lines))

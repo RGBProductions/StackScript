@@ -2,6 +2,8 @@ import os
 import math
 import sys
 
+labels = {}
+
 if len(sys.argv) < 2:
 	print("E: no script path provided")
 	exit()
@@ -10,11 +12,31 @@ if not os.path.exists(sys.argv[1]):
 	print("E: script path invalid")
 	exit()
 
+if len(sys.argv) > 2:
+	with open(sys.argv[2]) as f:
+		dat = f.read().splitlines()
+	for line in dat:
+		lbl,val = line.split()
+		labels[str(val)] = lbl
+
 script = sys.argv[1]
 if os.path.isdir(script):
 	script += "/main.stksc"
 
 import random
+
+def fixpath(name):
+	name_spl = name.split(os.path.sep)
+	absolute = []
+	for itm in name_spl:
+		if itm == ".":
+			continue
+		if itm == "..":
+			if len(absolute) > 0:
+				absolute.pop()
+			continue
+		absolute.append(itm)
+	return os.path.join(".",*absolute)
 
 class StackField:
 	stacks = [[] for _ in range(256)]
@@ -411,6 +433,13 @@ class StackField:
 	
 	def save(stack,name):
 		stack -= 1
+		name = fixpath(name)
+		name_spl = name.split(os.path.sep)
+		cur = "."
+		for i in range(len(name_spl)-1):
+			cur = os.path.join(cur,name_spl[i])
+			if not os.path.exists(cur):
+				os.mkdir(cur)
 		if stack < 0 or stack >= len(StackField.stacks):
 			with open(name, "w") as f: pass
 			StackField.registers["v"] = 0
@@ -427,6 +456,7 @@ class StackField:
 	
 	def load(stack,name):
 		stack -= 1
+		name = fixpath(name)
 		if stack < 0 or stack >= len(StackField.stacks):
 			StackField.registers["v"] = 0
 			StackField.registers["s"] = 0
@@ -440,10 +470,28 @@ class StackField:
 			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
 		else:
 			StackField.registers["v"] = 0
+	
+	def exit():
+		State.line = len(State.lines)
 
 class State:
 	line = 0
+	lines = []
 	gfxEnabled = False
+
+def stkscErr(msg):
+	print("Error: " + msg)
+	print("Stacktrace:")
+	for i in StackField.callstack:
+		if str(i+1) in labels:
+			print(f"  label {labels[str(i+1)]}: {State.lines[i]}")
+		else:
+			print(f"  ln {i+1}: {State.lines[i]}")
+	if str(State.line+1) in labels:
+		print(f"  label {labels[str(State.line+1)]}: {State.lines[State.line]}")
+	else:
+		print(f"  ln {State.line+1}: {State.lines[State.line]}")
+	exit()
 
 class Inst:
 	def run(*args):
@@ -454,11 +502,19 @@ class Inst:
 				a[i] = int(arg)
 			if arg in StackField.registers:
 				a[i] = StackField.registers[arg]
-		StackField.__dict__[inst](*a)
+		if not (inst in StackField.__dict__):
+			stkscErr("No instruction '" + inst + "' exists")
+		try:
+			StackField.__dict__[inst](*a)
+		except TypeError as e:
+			stkscErr("Wrong number of arguments for '" + inst + "'")
+		except Exception as e:
+			stkscErr(f"Unknown error occurred: {e}")
 
 def run(lines):
-	while State.line < len(lines):
-		args = lines[State.line].split()
+	State.lines = lines
+	while State.line < len(State.lines):
+		args = State.lines[State.line].split()
 		Inst.run(*args)
 		State.line += 1
 		StackField.registers["r"] = random.randint(0,255)

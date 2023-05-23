@@ -20,4 +20,4 @@ if script == None:
 
 subprocess.run([sys.executable, os.path.join(base, "compile.py"), script])
 if run:
-	subprocess.run([sys.executable, os.path.join(base, "interpreter.py"), "out/compiled.stksc"])
+	subprocess.run([sys.executable, os.path.join(base, "interpreter.py"), "out/compiled.stksc", "out/labels.txt"])
