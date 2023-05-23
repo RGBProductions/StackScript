@@ -62,6 +62,7 @@ Usage: `instruction <required> [optional]`
 | `floor <stack>` | Rounds **down** the top item of `stack`. | `s` `v` |
 | `ceil <stack>` | Rounds **up** the top item of `stack`. | `s` `v` |
 | `inv <stack>` | Inverts the top item of `stack`. | `s` `v` |
+| `mod <stack>` | Performs a modulo operator on the top two items of `stack`. | `s` `v` |
 | `pull <stack> <i>` | Pulls element `i` (bottom-up) to the top of `stack`. | `s` `v` |
 | `drop <stack> <n>` | Drops the top item of `stack` down `n` spaces. | `s` `v` |
 | `save <stack> <path>` | Saves `stack` to the file at `path` (relative to the script's directory). | `s` `v` |
