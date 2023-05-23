@@ -7,11 +7,11 @@ if not os.path.exists("out"):
 
 if len(sys.argv) < 2:
 	print("E: no script path provided")
-	exit()
+	exit(1)
 
 if not os.path.exists(sys.argv[1]):
 	print("E: script path invalid")
-	exit()
+	exit(1)
 
 script = sys.argv[1]
 if os.path.isdir(script):

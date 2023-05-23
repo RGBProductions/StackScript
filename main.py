@@ -16,7 +16,7 @@ for arg in sys.argv[1:]:
 
 if script == None:
 	print("E: no script path provided")
-	exit()
+	exit(1)
 
 subprocess.run([sys.executable, os.path.join(base, "compile.py"), script])
 if run:
