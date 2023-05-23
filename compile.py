@@ -123,5 +123,7 @@ class Precomp:
 with open(script) as f:
 	lines = f.read().splitlines()
 Precomp.compile(lines)
+if not os.path.exists("out"):
+	os.mkdir("out")
 with open("out/compiled.stksc", "w") as f:
 	f.write("\n".join(lines))

@@ -408,6 +408,38 @@ class StackField:
 			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
 		else:
 			StackField.registers["v"] = 0
+	
+	def save(stack,name):
+		stack -= 1
+		if stack < 0 or stack >= len(StackField.stacks):
+			with open(name, "w") as f: pass
+			StackField.registers["v"] = 0
+			StackField.registers["s"] = 0
+			return
+		with open(name, "w") as f:
+			for val in StackField.stacks[stack]:
+				f.write(int.to_bytes(val, 4, "little").decode("utf-8"))
+		StackField.registers["s"] = len(StackField.stacks[stack])
+		if StackField.registers["s"] > 0:
+			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
+		else:
+			StackField.registers["v"] = 0
+	
+	def load(stack,name):
+		stack -= 1
+		if stack < 0 or stack >= len(StackField.stacks):
+			StackField.registers["v"] = 0
+			StackField.registers["s"] = 0
+			return
+		with open(name, "rb") as f:
+			dat = f.read()
+		for i in range(int(len(dat)/4)):
+			StackField.stacks[stack].append(int.from_bytes(dat[i*4:i*4+4], "little"))
+		StackField.registers["s"] = len(StackField.stacks[stack])
+		if StackField.registers["s"] > 0:
+			StackField.registers["v"] = StackField.stacks[stack][StackField.registers["s"]-1]
+		else:
+			StackField.registers["v"] = 0
 
 class State:
 	line = 0

@@ -1,5 +1,6 @@
 # StackScript
 ## A pseudo-esoteric programming language with a unique memory management method.
+## This is the EXPERIMENTAL branch! If you only want features that have been tested and approved, switch instead to the [STABLE](https://github.com/TheFuryBumblebee/StackScript/tree/stable) branch.
 ---
 ## Quick Finder
 [Memory](#memory)\
