@@ -16,6 +16,19 @@ if os.path.isdir(script):
 
 import random
 
+def fixpath(name):
+	name_spl = name.split(os.path.sep)
+	absolute = []
+	for itm in name_spl:
+		if itm == ".":
+			continue
+		if itm == "..":
+			if len(absolute) > 0:
+				absolute.pop()
+			continue
+		absolute.append(itm)
+	return os.path.join(".",*absolute)
+
 class StackField:
 	stacks = [[] for _ in range(256)]
 	registers = {"s": 0, "v": 0, "c": 0, "r": random.randint(0,255)}
@@ -411,6 +424,13 @@ class StackField:
 	
 	def save(stack,name):
 		stack -= 1
+		name = fixpath(name)
+		name_spl = name.split(os.path.sep)
+		cur = "."
+		for i in range(len(name_spl)-1):
+			cur = os.path.join(cur,name_spl[i])
+			if not os.path.exists(cur):
+				os.mkdir(cur)
 		if stack < 0 or stack >= len(StackField.stacks):
 			with open(name, "w") as f: pass
 			StackField.registers["v"] = 0
@@ -427,6 +447,7 @@ class StackField:
 	
 	def load(stack,name):
 		stack -= 1
+		name = fixpath(name)
 		if stack < 0 or stack >= len(StackField.stacks):
 			StackField.registers["v"] = 0
 			StackField.registers["s"] = 0
