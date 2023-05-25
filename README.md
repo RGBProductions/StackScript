@@ -36,6 +36,7 @@ To make some operations possible, there are 4 **registers**:
 Usage: `instruction <required> [optional]`
 | Instruction | Purpose | Affected Registers |
 | - | - | - |
+| `label <name> [value]` | Creates a label under `name`. If `value` is not provided, the line number is used. Gets removed during compile. | *None* |
 | `push <stack> [val1] [val2] ...` | Pushes one or more values to `stack`. | `s` `v` |
 | `pop <stack> <n>` | Removes `n` items from `stack`. | `s` `v` |
 | `clear <stack>` | Removes all items from `stack`. | `s` `v` |
