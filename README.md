@@ -1,5 +1,8 @@
 # StackScript
 ## A pseudo-esoteric programming language with a unique memory management method.
+TODO:
+- Make interpreter less garbage
+- Bytecode (?)
 ---
 ## Quick Finder
 [Memory](#memory)\
